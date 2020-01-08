@@ -37,9 +37,9 @@ class NeuralNetwork {
       $this->bias_h = a->bias_h->copy();
       $this->bias_o = a->bias_o->copy();
     } else {
-      $this->input_nodes = in_nodes;
-      $this->hidden_nodes = hid_nodes;
-      $this->output_nodes = out_nodes;
+      $this->input_nodes = $in_nodes;
+      $this->hidden_nodes = $hid_nodes;
+      $this->output_nodes = $out_nodes;
 
       $this->weights_ih = new Matrix($this->hidden_nodes, $this->input_nodes);
       $this->weights_ho = new Matrix($this->output_nodes, $this->hidden_nodes);
@@ -69,7 +69,7 @@ class NeuralNetwork {
     $hidden->map($this->activation_function->func);
 
     // Generating the output's output!
-    $output = $Matrix->multiply($this->weights_ho, hidden);
+    $output = $Matrix->multiply($this->weights_ho, $hidden);
     $output->add($this->bias_o);
     $output->map($this->activation_function->func);
 
@@ -149,7 +149,7 @@ class NeuralNetwork {
   }
 
   static function deserialize($data) {
-    if (is_string(data)) {
+    if (is_string($data)) {
       $data = json_decode($data);
     }
     $nn = new NeuralNetwork($data->input_nodes, $data->hidden_nodes, $data->output_nodes);
