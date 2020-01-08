@@ -59,7 +59,7 @@ class NeuralNetwork {
 
   }
 
-  function predict(input_array) {
+  function predict($input_array) {
 
     // Generating the Hidden Outputs
     $inputs = $Matrix->fromArray($input_array);
@@ -74,7 +74,7 @@ class NeuralNetwork {
     $output->map($this->activation_function->func);
 
     // Sending back to the caller!
-    return output.toArray();
+    return (array) $output;
   }
 
   function setLearningRate($learning_rate = 0.1) {
