@@ -1,3 +1,4 @@
+<?php
 // Other techniques for learning
 
 class ActivationFunction {
@@ -177,3 +178,4 @@ class NeuralNetwork {
 
 
 }
+?>
