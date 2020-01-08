@@ -24,7 +24,7 @@ class NeuralNetwork {
   * if first argument is a NeuralNetwork the constructor clones it
   * USAGE: cloned_nn = new NeuralNetwork(to_clone_nn);
   */
-  __construct($in_nodes, $hid_nodes, $out_nodes) {
+  function __construct($in_nodes, $hid_nodes, $out_nodes) {
     if ($in_nodes instanceof NeuralNetwork) {
       $a = $in_nodes;
       $this->input_nodes = $a->input_nodes;
