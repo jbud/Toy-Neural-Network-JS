@@ -8,15 +8,12 @@ class ActivationFunction {
   }
 }
 
-$sigmoid = new ActivationFunction(
-  $x => 1 / (1 + pow(-$x)),
-  $y => $y * (1 - $y)
-);
+//requires php 7.4 or later
 
-$tanh = new ActivationFunction(
-  $x => tanh($x),
-  $y => 1 - ($y * $y)
-);
+$sigmoid = new ActivationFunction(fn($x) => 1 / (1 + exp(-$x)), fn($y) => $y * (1 - $y));
+
+$tanh = new ActivationFunction(fn($x) => tanh($x), fn($y) => 1 - ($y * $y));
+
 
 
 class NeuralNetwork {
@@ -24,6 +21,7 @@ class NeuralNetwork {
   * if first argument is a NeuralNetwork the constructor clones it
   * USAGE: cloned_nn = new NeuralNetwork(to_clone_nn);
   */
+  
   function __construct($in_nodes, $hid_nodes, $out_nodes) {
     if ($in_nodes instanceof NeuralNetwork) {
       $a = $in_nodes;
@@ -163,10 +161,11 @@ class NeuralNetwork {
 
 
   // Adding function for neuro-evolution
+  /* PHP: use $nn2 = clone $nn;
   function copy() {
     return new NeuralNetwork($this);
   }
-
+*/
   // Accept an arbitrary function for mutation
   function mutate($func) {
     $this->weights_ih->map($func);
