@@ -9,31 +9,35 @@ class ActivationFunction {
 }
 
 //requires php 7.4 or later
-
+global $sigmoid;
+global $tanh;
 $sigmoid = new ActivationFunction(fn($x) => 1 / (1 + exp(-$x)), fn($y) => $y * (1 - $y));
 
 $tanh = new ActivationFunction(fn($x) => tanh($x), fn($y) => 1 - ($y * $y));
 
-
+//trying to shut errors up
+class Matrix{}
+$Matrix = new Matrix;
 
 class NeuralNetwork {
   /*
   * if first argument is a NeuralNetwork the constructor clones it
   * USAGE: cloned_nn = new NeuralNetwork(to_clone_nn);
   */
-  
   function __construct($in_nodes, $hid_nodes, $out_nodes) {
+    $this->sigmoid = new ActivationFunction(fn($x) => 1 / (1 + exp(-$x)), fn($y) => $y * (1 - $y));
+    $this->tanh = new ActivationFunction(fn($x) => tanh($x), fn($y) => 1 - ($y * $y));
     if ($in_nodes instanceof NeuralNetwork) {
       $a = $in_nodes;
       $this->input_nodes = $a->input_nodes;
       $this->hidden_nodes = $a->hidden_nodes;
       $this->output_nodes = $a->output_nodes;
 
-      $this->weights_ih = a->weights_ih->copy();
-      $this->weights_ho = a->weights_ho->copy();
+      $this->weights_ih = $a->weights_ih;
+      $this->weights_ho = $a->weights_ho;
 
-      $this->bias_h = a->bias_h->copy();
-      $this->bias_o = a->bias_o->copy();
+      $this->bias_h = $a->bias_h;
+      $this->bias_o = $a->bias_o;
     } else {
       $this->input_nodes = $in_nodes;
       $this->hidden_nodes = $hid_nodes;
@@ -79,7 +83,7 @@ class NeuralNetwork {
     $this->learning_rate = $learning_rate;
   }
 
-  function setActivationFunction($func = $sigmoid) {
+  function setActivationFunction($func = $this->sigmoid) {
     $this->activation_function = $func;
   }
 
@@ -125,8 +129,8 @@ class NeuralNetwork {
 
     // Calculate hidden gradient
     $hidden_gradient = $Matrix->map($hidden, $this->activation_function->dfunc);
-    $hidden_gradient.multiply($hidden_errors);
-    $hidden_gradient.multiply($this->learning_rate);
+    $hidden_gradient->multiply($hidden_errors);
+    $hidden_gradient->multiply($this->learning_rate);
 
     // Calcuate input->hidden deltas
     $inputs_T = $Matrix->transpose($inputs);
@@ -134,7 +138,7 @@ class NeuralNetwork {
 
     $this->weights_ih->add($weight_ih_deltas);
     // Adjust the bias by its deltas (which is just the gradients)
-    $this->bias_h.add($hidden_gradient);
+    $this->bias_h->add($hidden_gradient);
 
     // outputs.print();
     // targets.print();
