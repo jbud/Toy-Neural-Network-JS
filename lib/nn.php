@@ -56,7 +56,7 @@ class NeuralNetwork {
 
     // TODO: copy these as well
     $this->setLearningRate();
-    $this->setActivationFunction();
+    $this->setActivationFunction(null);
 
 
   }
@@ -83,8 +83,13 @@ class NeuralNetwork {
     $this->learning_rate = $learning_rate;
   }
 
-  function setActivationFunction($func = $this->sigmoid) {
-    $this->activation_function = $func;
+  function setActivationFunction($func) {
+    if (!is_null($func)){
+      $f = $func;
+    } else {
+      $f = $this->sigmoid;
+    }
+    $this->activation_function = $f;
   }
 
   function train($input_array, $target_array) {
